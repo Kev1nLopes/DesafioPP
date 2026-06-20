@@ -1,10 +1,20 @@
 import Fastify from 'fastify'
+import { CellShop } from './data/data.ts';
 
 const app = Fastify()
 
-app.get('/', async () => {
-  return { hello: 'world' }
-})
+
+app.register(import('./routes/routes.ts'));
+
+
+if(process.env.CLUSTER !== 'true') {
+    const { EventEmitter } = await import('node:events');
+
+    const cellShop = new CellShop();
+    const myEmitter = new EventEmitter();
+
+
+}
 
 app.listen({ port: 3000 }, (err, address) => {
   if (err) {
